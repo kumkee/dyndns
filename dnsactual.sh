@@ -20,16 +20,19 @@ if test -f $IPCONF
   CacheIP=$(cat $IPCONF)
 fi
 #echo $CacheIP
-CurreIP=$(curl $IPCHECK) # | grep Detected | cut -d : -f 2 | cut -d '<' -f 1 | tr -d " ")
+CurreIP=$(curl -s $IPCHECK) # | grep Detected | cut -d : -f 2 | cut -d '<' -f 1 | tr -d " ")
 #echo $CurreIP
 if [ "$CurreIP" = "$CacheIP" ]
 then
   # Both IP are equal
-  echo `date` "Update not required. " # $CurreIP >> $LOGFIL
+  echo `date` "Update not required. IP: $CurreIP" # $CurreIP >> $LOGFIL
+elif [ -z "$CurreIP" ]
+then
+  echo `date` "New IP empty."
 else
   # The IP has change
   echo "Updating http://free.afraid.org with " $CurreIP
   curl $DIRURL
   echo `date`  "Updating log with IP " $CurreIP >> $LOGFIL
+  echo $CurreIP > $IPCONF
 fi
-echo $CurreIP > $IPCONF
