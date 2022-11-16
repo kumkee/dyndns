@@ -1,8 +1,10 @@
-#!/data/data/com.termux/files/usr/bin/sh
+#!/data/data/com.termux/files/usr/bin/bash
 #/data/data/com.termux/files/usr/etc
 
 IPCONF="/data/data/com.termux/files/usr/etc/freedns/dnsactual.conf"
-DIRURL="[afraid freedns update link]"
+APIKEY=`cat $HOME/etc/afraid_api.txt`
+DIRURL="https://freedns.afraid.org/dynamic/update.php?$APIKEY"
+# IPCHECK="http://freedns.afraid.org/dynamic/check.php"
 IPCHECK="ifconfig.me"
 LOGFIL="/data/data/com.termux/files/usr/var/log/dnsactual.log"
 
@@ -11,8 +13,9 @@ LOGFIL="/data/data/com.termux/files/usr/var/log/dnsactual.log"
 #  application name: dnsactual
 #  other files: dnsactual.conf (keeps the last updated ip)
 #               dnsactual.log  (register date & time of the actualization)
-#  Author: Ernest Danton
-#  Date: 01/29/2007
+#               afraid_api.txt (where API KEY is stored)
+#  Author: kumkee based on Ernest Danton 01/29/2007
+#  Date: 2022/11/16
 ##############################################################################
 
 if test -f $IPCONF
@@ -29,10 +32,13 @@ then
 elif [ -z "$CurreIP" ]
 then
   echo `date` "New IP empty."
+elif [[ $CurreIP == *"upstream connect error"* ]]
+then
+  echo "Connection error."
 else
   # The IP has change
   echo "Updating http://free.afraid.org with " $CurreIP
-  curl $DIRURL
+  curl $DIRURL 
   echo `date`  "Updating log with IP " $CurreIP >> $LOGFIL
   echo $CurreIP > $IPCONF
 fi
