@@ -1,12 +1,10 @@
-#!/data/data/com.termux/files/usr/bin/bash
-#/data/data/com.termux/files/usr/etc
+#!/usr/bin/bash
 
-IPCONF="/data/data/com.termux/files/usr/etc/freedns/dnsactual.conf"
+IPCONF="$HOME/etc/dnsactual.conf"
 APIKEY=`cat $HOME/etc/afraid_api.txt`
 DIRURL="https://freedns.afraid.org/dynamic/update.php?$APIKEY"
-# IPCHECK="http://freedns.afraid.org/dynamic/check.php"
 IPCHECK="ifconfig.me"
-LOGFIL="/data/data/com.termux/files/usr/var/log/dnsactual.log"
+LOGFIL="$HOME/var/log/dnsactual.log"
 
 ##############################################################################
 #
