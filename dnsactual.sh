@@ -5,6 +5,7 @@ APIKEY=`cat $HOME/etc/afraid_api.txt`
 DIRURL="https://freedns.afraid.org/dynamic/update.php?$APIKEY"
 IPCHECK="ifconfig.me"
 LOGFIL="$HOME/var/log/dnsactual.log"
+LOGERR="$HOME/var/log/dnsactual-errors.log"
 
 ##############################################################################
 #
@@ -29,10 +30,10 @@ then
   echo `date` "Update not required. IP: $CurreIP" # $CurreIP >> $LOGFIL
 elif [ -z "$CurreIP" ]
 then
-  echo `date` "New IP empty."
+  echo `date` "New IP empty." >> $LOGERR
 elif [[ $CurreIP == *"upstream connect error"* ]]
 then
-  echo "Connection error."
+  echo `date` "Connection error. $CurreIP" >> $LOGERR
 else
   # The IP has change
   echo "Updating http://free.afraid.org with " $CurreIP
