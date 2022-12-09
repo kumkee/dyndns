@@ -6,6 +6,7 @@ DIRURL="https://freedns.afraid.org/dynamic/update.php?$APIKEY"
 IPCHECK="ifconfig.me"
 LOGFIL="$HOME/var/log/dnsactual.log"
 LOGERR="$HOME/var/log/dnsactual-errors.log"
+LOGNRQ="$HOME/var/log/dnsactual-nrq.log"
 
 ##############################################################################
 #
@@ -27,7 +28,7 @@ CurreIP=$(curl -s $IPCHECK) # | grep Detected | cut -d : -f 2 | cut -d '<' -f 1 
 if [ "$CurreIP" = "$CacheIP" ]
 then
   # Both IP are equal
-  echo `date` "Update not required. IP: $CurreIP" # $CurreIP >> $LOGFIL
+  echo `date` "Update not required. IP: $CurreIP" > $LOGNRQ
 elif [ -z "$CurreIP" ]
 then
   echo `date` "New IP empty." >> $LOGERR
